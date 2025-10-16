@@ -48,6 +48,7 @@ body {
 /* Section Styles */
 .section {
     padding: var(--spacing-xl) 0;
+    scroll-margin-top: 70px;
 }
 
 .section-alt {
@@ -86,16 +87,26 @@ a:hover {
     top: 0;
     z-index: 1000;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .nav-brand {
     color: var(--white);
     font-size: 1.5rem;
     font-weight: bold;
+    display: flex;
+    align-items: center;
 }
 
 .nav-menu {
     list-style: none;
+    display: flex;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
 }
 
 .nav-menu li {
@@ -111,7 +122,7 @@ a:hover {
     transition: background 0.3s ease;
 }
 
-.nav-link:hover {
+.nav-link:hover, .nav-link.active{
     background: rgba(255,255,255,0.1);
     color: var(--white);
 }
@@ -139,6 +150,22 @@ a:hover {
     color: var(--white);
     padding: var(--spacing-xl) var(--spacing-md);
     min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; 
+    text-align: center;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.hero-content {
+    max-width: 800px;
 }
 
 .hero-title {
@@ -193,7 +220,14 @@ a:hover {
 
 /* About Section - TO BE ENHANCED WITH GRID */
 .about-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
     margin-top: var(--spacing-md);
+}
+
+.about-availability {
+    justify-self: center;
 }
 
 .about-text {
@@ -233,6 +267,10 @@ a:hover {
 /* Skills Section - TO BE TRANSFORMED WITH GRID */
 .skills-grid {
     margin-top: var(--spacing-md);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 2rem;    
 }
 
 .skill-card {
@@ -295,40 +333,13 @@ a:hover {
 }
 
 /* Projects Section - TO BE ENHANCED WITH GRID */
-/* Filter Buttons - Week 7 Addition */
-.filter-buttons {
-    display: flex;
-    justify-content: center;
-    gap: var(--spacing-sm);
-    margin: var(--spacing-md) 0;
-    flex-wrap: wrap;
-}
-
-.filter-btn {
-    padding: var(--spacing-xs) var(--spacing-md);
-    border: 2px solid var(--primary-color);
-    background: transparent;
-    color: var(--primary-color);
-    border-radius: 25px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 1rem;
-    font-weight: 500;
-}
-
-.filter-btn:hover {
-    background: var(--primary-color);
-    color: var(--white);
-    transform: translateY(-2px);
-}
-
-.filter-btn.active {
-    background: var(--primary-color);
-    color: var(--white);
-}
-
 .projects-grid {
     margin-top: var(--spacing-md);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    overflow: wrap;
 }
 
 .project-card {
@@ -338,6 +349,11 @@ a:hover {
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     margin-bottom: var(--spacing-md);
     transition: transform 0.3s ease;
+    position: relative;
+}
+
+.project-card.featured {
+    grid-column: 1 / -1; 
 }
 
 .project-card:hover {
@@ -401,10 +417,15 @@ a:hover {
 }
 
 .project-content {
+    display: flex;
+    flex-direction: column;
     padding: var(--spacing-md);
 }
 
 .project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
     margin-bottom: var(--spacing-sm);
 }
 
@@ -427,6 +448,9 @@ a:hover {
 }
 
 .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5 rem;
     margin-top: var(--spacing-sm);
 }
 
@@ -443,6 +467,7 @@ a:hover {
 
 /* Contact Form - TO BE ENHANCED WITH GRID */
 .contact-content {
+    display: grid;
     max-width: 800px;
     margin: 0 auto;
 }
@@ -480,34 +505,6 @@ a:hover {
 
 .form-group textarea {
     resize: vertical;
-}
-
-/* Form Validation Styles - Week 7 Addition */
-.error-message {
-    color: #dc2626;
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-    display: block;
-}
-
-.form-group input.error,
-.form-group textarea.error {
-    border-color: #dc2626;
-}
-
-.form-group input.success,
-.form-group textarea.success {
-    border-color: #059669;
-}
-
-.success-message {
-    background: #d1fae5;
-    color: #059669;
-    padding: var(--spacing-sm);
-    border-radius: 8px;
-    margin-top: var(--spacing-md);
-    text-align: center;
-    font-weight: 500;
 }
 
 /* Footer */
@@ -559,3 +556,92 @@ a:hover {
 .mb-1 { margin-bottom: var(--spacing-sm); }
 .mb-2 { margin-bottom: var(--spacing-md); }
 .mb-3 { margin-bottom: var(--spacing-lg); }
+
+/* Filter Buttons */
+.filter-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 0.5rem 1.5rem;
+    border: 2px solid #667eea;
+    background: transparent;
+    color: #667eea;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.filter-btn:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.filter-btn.active {
+    background: #667eea;
+    color: white;
+}
+
+/* Form Validation Styles */
+.error-message {
+    color: #dc2626;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+.form-group input.error,
+.form-group textarea.error {
+    border-color: #dc2626;
+}
+
+.success-message {
+    background: #d1fae5;
+    color: #059669;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    text-align: center;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .nav-menu {
+        position: fixed;
+        left: -100%;
+        top: 70px;
+        flex-direction: column;
+        background-color: #fff;
+        width: 100%;
+        text-align: center;
+        transition: 0.3s;
+        box-shadow: 0 10px 27px rgba(0,0,0,0.05);
+    }
+
+    .nav-menu.active  {
+        left: 0;
+        margin-left: 0;
+        gap: var(--spacing-sm);
+    }
+    
+    .nav-menu.active li {
+        padding: var(--spacing-sm) 0;
+        margin-left: 0;
+    }
+
+    .nav-menu.active a {
+        color: var(--primary-color);
+    }
+
+    .nav-toggle {
+        display: block;
+        cursor: pointer;
+    }
+}
