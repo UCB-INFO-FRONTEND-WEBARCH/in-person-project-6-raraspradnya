@@ -22,19 +22,159 @@ function App() {
   // TODO: Add smooth scroll handler
   // Replace: navLinks.forEach(link => link.addEventListener('click', ...))
   // With: const handleNavClick = (e) => { ... }
+  const handleNavClick = (e) => {
+    e.preventDefault();
+    const targetId = e.currentTarget.getAttribute('href');
+    const targetSection = document.querySelector(targetId);
+    if (targetSection) {
+      targetSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    };
+
+    const navMenu = document.querySelector('.nav-menu');
+    const navToggle = document.querySelector('.nav-toggle');
+    navMenu.classList.toggle('active');
+    navToggle.classList.toggle('active');
+  }
   
   // TODO: Add filter handler
   // Replace: filterButtons.forEach(button => button.addEventListener('click', ...))
   // With: const handleFilterClick = (category) => { ... }
+  const handleFilterClick = (button) => {
+    const filterValue = button.currentTarget.getAttribute('data-filter');
+    const projectCards = document.querySelectorAll('.project-card');
+
+    projectCards.forEach(card => {
+      if (card.getAttribute('data-category') === filterValue || filterValue === 'all'){
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    })
+
+    document.querySelectorAll('.filter-btn').forEach(btn =>{
+      btn.classList.remove('active')
+    })
+    e.currentTarget.classList.add('active');
+  }
   
   // TODO: Add form validation functions
   // You'll need: isValidEmail, showError, clearError, showSuccess
   // These can stay mostly the same!
-  
+  // Function to validate email format
+  function isValidEmail(email) {
+      // Hint: Use a simple regex or check for @ and .
+      // Example: return email.includes('@') && email.includes('.');
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+  }
+
+  // Function to show error message
+  function showError(input, message) {
+      // TODO:
+      // 1. Create a span element for error message
+      // 2. Set its textContent to the message
+      // 3. Add a class 'error-message' for styling
+      // 4. Append it after the input field
+      // Hint: Use createElement, classList.add, and appendChild
+      clearError(input);
+      const errorElement = document.createElement("span");
+      errorElement.className = 'error-message';
+      errorElement.textContent = message;
+
+      input.classList.add('error');
+      input.classList.remove('success');
+
+      input.parentElement.appendChild(errorElement);
+  }
+
+  // Function to clear error message
+  function clearError(input) {
+      // TODO:
+      // 1. Find the error message element (next sibling)
+      // 2. Remove it from the DOM
+      // Hint: Use querySelector or nextElementSibling and remove()
+      const errorElement = input.parentElement.querySelector('.error-message');
+      if (errorElement){
+          errorElement.remove();
+      }
+      input.classList.remove('error');
+  }
+
+  // Show success state
+  function showSuccess(input) {
+      clearError(input);
+      input.classList.add('success');
+      input.classList.remove('error');
+  }
+
   // TODO: Add form submit handler
   // Replace: contactForm.addEventListener('submit', ...)
   // With: const handleFormSubmit = (e) => { ... }
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    let isValid = true;
 
+    const nameInput = document.querySelector('#name');
+    const emailInput = document.querySelector('#email');
+    const messageInput = document.querySelector('#message');
+
+    if (nameInput.value.trim().length <2 || !isValidEmail(emailInput.value) || messageInput.value.trim().length < 10){
+      isValid = false;
+    }
+
+    if (isValid){
+      const successMsg = document.createElement('div');
+      successMsg.className = 'success-message';
+      successMsg.textContent = 'Thank you! Your message has been sent successfully.';
+
+      contactForm.appendChild(successMsg);
+
+      setTimeout(() => {
+          contactForm.reset();
+          successMsg.remove();
+          document.querySelectorAll('.success').forEach(input =>{
+              input.classList.remove('success');
+          })
+      }, 3000);
+
+    }
+  }
+  
+  // Scroll event for active nav and skill animations
+  const handleScroll = () => {
+    // Active nav highlighting
+    const sections = document.querySelectorAll('section');
+    const scrollPos = window.scrollY + 100;
+
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.offsetHeight;
+      const sectionId = section.getAttribute('id');
+
+      if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+        document.querySelectorAll('.nav-link').forEach(link =>
+          link.classList.remove('active')
+        );
+        const activeLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
+        if (activeLink) {
+          activeLink.classList.add('active');
+        }
+      }
+    });
+  };
+
+  // Attach scroll listener when component loads
+  window.addEventListener('scroll', handleScroll); 
+
+  const handleMobileMenuToggle = () => {
+    const navMenu = document.querySelector('.nav-menu');
+    const navToggle = document.querySelector('.nav-toggle');
+    navMenu.classList.toggle('active');
+    navToggle.classList.toggle('active');
+  };
 
   // ============================================
   // PART 2: JSX RETURN STATEMENT
@@ -53,24 +193,28 @@ function App() {
 
   return (
     <div className="portfolio">
+      {/* TODO: Add your navigation here */}
+      {/* HINT: Replace <a href="#home" class="nav-link"> with <a href="#home" className="nav-link"> */}
+      {/* HINT: Replace onclick with onClick={handleNavClick} */}
       <nav id="navbar">
           <div className="nav-brand">
               <span>Alex Johnson</span>
           </div>
           <ul className="nav-menu">
-              <li><a href="#home" className="nav-link">Home</a></li>
-              <li><a href="#about" className="nav-link">About</a></li>
-              <li><a href="#skills" className="nav-link">Skills</a></li>
-              <li><a href="#projects" className="nav-link">Projects</a></li>
-              <li><a href="#contact" className="nav-link">Contact</a></li>
+              <li><a href="#home" className="nav-link" onClick={handleNavClick}>Home</a></li>
+              <li><a href="#about" className="nav-link" onClick={handleNavClick}>About</a></li>
+              <li><a href="#skills" className="nav-link" onClick={handleNavClick}>Skills</a></li>
+              <li><a href="#projects" className="nav-link" onClick={handleNavClick}>Projects</a></li>
+              <li><a href="#contact" className="nav-link" onClick={handleNavClick}>Contact</a></li>
           </ul>
-          <div className="nav-toggle">
+          <div className="nav-toggle" onClick={handleMobileMenuToggle}>
               <span></span>
               <span></span>
               <span></span>
           </div>
       </nav>
 
+      {/* TODO: Add your hero section here */}
       <section id="home" className="hero">
           <div className="hero-content">
               <h1 className="hero-title">Alex Johnson</h1>
@@ -83,6 +227,7 @@ function App() {
           </div>
       </section>
 
+      {/* TODO: Add your about section here */}
       <section id="about" className="section">
           <div className="container">
               <h2>About Me</h2>
@@ -116,6 +261,7 @@ function App() {
           </div>
       </section>
 
+      {/* TODO: Add your skills section here */}
       <section id="skills" className="section section-alt">
           <div className="container">
               <h2>Skills & Technologies</h2>
@@ -195,15 +341,17 @@ function App() {
           </div>
       </section>
 
+      {/* TODO: Add your projects section here */}
+      {/* HINT: For filter buttons, use onClick={() => handleFilterClick('category')} */}
       <section id="projects" className="section">
           <div className="container">
               <h2>Featured Projects</h2>
               <div className="filter-buttons">
-                  <button className="filter-btn active" data-filter="all">All Projects</button>
-                  <button className="filter-btn" data-filter="frontend">Frontend</button>
-                  <button className="filter-btn" data-filter="fullstack">Full-Stack</button>
-                  <button className="filter-btn" data-filter="design">Design</button>
-                  <button className="filter-btn" data-filter="webapp">Web App</button>
+                  <button className="filter-btn active" data-filter="all" onClick={handleFilterClick}>All Projects</button>
+                  <button className="filter-btn" data-filter="frontend" onClick={handleFilterClick}>Frontend</button>
+                  <button className="filter-btn" data-filter="fullstack" onClick={handleFilterClick}>Full-Stack</button>
+                  <button className="filter-btn" data-filter="design" onClick={handleFilterClick}>Design</button>
+                  <button className="filter-btn" data-filter="webapp" onClick={handleFilterClick}>Web App</button>
               </div>
               <div className="projects-grid">
                   <div className="project-card featured" data-category="fullstack">
@@ -322,13 +470,16 @@ function App() {
           </div>
       </section>
 
+      {/* TODO: Add your contact form here */}
+      {/* HINT: Form will use onSubmit={handleFormSubmit} */}
+      {/* HINT: Inputs will use onChange for real-time validation */}
       <section id="contact" className="section section-alt">
           <div className="container">
               <h2>Get In Touch</h2>
               <div className="contact-content">
                   <p>I'm always interested in hearing about new opportunities and projects. Feel free to reach out!</p>
 
-                  <form id="contact-form" className="contact-form">
+                  <form id="contact-form" className="contact-form" onSubmit={handleFormSubmit}>
                       <div className="form-grid">
                           <div className="form-group">
                               <label for="name">Name *</label>
@@ -359,6 +510,7 @@ function App() {
           </div>
       </section>
 
+      {/* TODO: Add your footer here */}
       <footer className="footer">
           <div className="container">
               <div className="footer-content">
@@ -372,25 +524,6 @@ function App() {
               </div>
           </div>
       </footer>
-      <script src="script.js"></script>
-      {/* TODO: Add your navigation here */}
-      {/* HINT: Replace <a href="#home" className="nav-link"> with <a href="#home" className="nav-link"> */}
-      {/* HINT: Replace onclick with onClick={handleNavClick} */}
-
-      {/* TODO: Add your hero section here */}
-      
-      {/* TODO: Add your about section here */}
-      
-      {/* TODO: Add your skills section here */}
-      
-      {/* TODO: Add your projects section here */}
-      {/* HINT: For filter buttons, use onClick={() => handleFilterClick('category')} */}
-      
-      {/* TODO: Add your contact form here */}
-      {/* HINT: Form will use onSubmit={handleFormSubmit} */}
-      {/* HINT: Inputs will use onChange for real-time validation */}
-      
-      {/* TODO: Add your footer here */}
     </div>
   )
 }
